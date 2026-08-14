@@ -2,7 +2,7 @@
 
 > MCP server for Grafana — query dashboards, alerts, and datasources via AI agents.
 
-![python](https://img.shields.io/badge/python-3.11+-blue) ![Grafana](https://img.shields.io/badge/Grafana-MCP-orange) ![MCP](https://img.shields.io/badge/MCP-compatible-green) ![License](https://img.shields.io/badge/License-MIT-yellow)
+![python](https://img.shields.io/badge/python-3.11+-blue) ![Grafana](https://img.shields.io/badge/Grafana-MCP-orange) ![MCP](https://img.shields.io/badge/MCP-compatible-green) ![License](https://img.shields.io/badge/License-MIT-yellow) [![CI](https://github.com/akkireddy-challa/grafana-mcp-observability/actions/workflows/ci.yml/badge.svg)](https://github.com/akkireddy-challa/grafana-mcp-observability/actions/workflows/ci.yml)
 
 ---
 
@@ -103,7 +103,7 @@ This pattern is used to allow AI agents to:
 - [ ] `create_annotation` — mark AI-driven investigation events
 - [ ] `silence_alert` — create Alertmanager silences via MCP
 - [ ] Multi-org Grafana support
-- [ ] GitHub Actions workflow for CI validation
+- [x] GitHub Actions workflow for CI validation
 
 ---
 
