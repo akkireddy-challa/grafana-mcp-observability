@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault("GRAFANA_TOKEN", "test-token")
 os.environ.setdefault("GRAFANA_URL", "http://localhost:3000")
 
-import server  # noqa: E402
+import server
 
 
 @pytest.mark.asyncio
