@@ -56,7 +56,7 @@ async def list_tools() -> list[Tool]:
         Tool(
             name="list_dashboards",
             description="List all Grafana dashboards, optionally filtered by folder.",
-            input_schema={
+            inputSchema={
                 "type": "object",
                 "properties": {
                     "folder_id": {"type": "integer", "description": "Folder ID to filter (optional)"},
@@ -67,7 +67,7 @@ async def list_tools() -> list[Tool]:
         Tool(
             name="get_dashboard",
             description="Fetch a dashboard by UID — returns panel definitions and queries.",
-            input_schema={
+            inputSchema={
                 "type": "object",
                 "properties": {
                     "uid": {"type": "string", "description": "Dashboard UID"},
@@ -78,7 +78,7 @@ async def list_tools() -> list[Tool]:
         Tool(
             name="list_datasources",
             description="List all configured datasources (Prometheus, Loki, Tempo, etc.).",
-            input_schema={
+            inputSchema={
                 "type": "object",
                 "properties": {},
                 "required": [],
@@ -87,7 +87,7 @@ async def list_tools() -> list[Tool]:
         Tool(
             name="query_datasource",
             description="Run a PromQL or LogQL query against a named datasource.",
-            input_schema={
+            inputSchema={
                 "type": "object",
                 "properties": {
                     "datasource_uid": {"type": "string", "description": "Datasource UID"},
@@ -101,7 +101,7 @@ async def list_tools() -> list[Tool]:
         Tool(
             name="list_alerts",
             description="List active and pending Grafana alert rules.",
-            input_schema={
+            inputSchema={
                 "type": "object",
                 "properties": {
                     "state": {"type": "string", "description": "Filter by state: firing, pending, normal"},
@@ -112,7 +112,7 @@ async def list_tools() -> list[Tool]:
         Tool(
             name="get_alert_details",
             description="Get labels, annotations, and current state for a specific alert rule.",
-            input_schema={
+            inputSchema={
                 "type": "object",
                 "properties": {
                     "alert_uid": {"type": "string", "description": "Alert rule UID"},
@@ -123,7 +123,7 @@ async def list_tools() -> list[Tool]:
         Tool(
             name="get_annotations",
             description="Fetch dashboard annotations (deployment events, incidents, etc.).",
-            input_schema={
+            inputSchema={
                 "type": "object",
                 "properties": {
                     "dashboard_id": {"type": "integer", "description": "Dashboard ID (optional)"},
