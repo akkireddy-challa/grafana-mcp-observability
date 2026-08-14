@@ -20,6 +20,7 @@ from mcp.types import TextContent, Tool
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
+
 GRAFANA_URL = os.environ.get("GRAFANA_URL", "http://localhost:3000").rstrip("/")
 GRAFANA_TOKEN = os.environ.get("GRAFANA_TOKEN", "")
 
@@ -32,6 +33,8 @@ HEADERS = {
 # ---------------------------------------------------------------------------
 # Helper
 # ---------------------------------------------------------------------------
+
+
 async def grafana_get(path: str, params: dict | None = None) -> Any:
     """Make a GET request to Grafana HTTP API."""
     async with httpx.AsyncClient(headers=HEADERS, timeout=30.0) as client:
@@ -39,10 +42,12 @@ async def grafana_get(path: str, params: dict | None = None) -> Any:
         resp.raise_for_status()
         return resp.json()
 
+
 # ---------------------------------------------------------------------------
 # MCP Server
 # ---------------------------------------------------------------------------
-server = Server("grafana-mcp-observability")
+
+server: Any = Server("grafana-mcp-observability")
 
 
 @server.list_tools()
@@ -133,12 +138,11 @@ async def list_tools() -> list[Tool]:
 @server.call_tool()
 async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
     """Route MCP tool calls to Grafana HTTP API."""
-
     if name == "list_dashboards":
-        params = {}
+        search_params: dict[str, Any] = {}
         if folder_id := arguments.get("folder_id"):
-            params["folderIds"] = folder_id
-        data = await grafana_get("/api/search", params={"type": "dash-db", **params})
+            search_params["folderIds"] = folder_id
+        data = await grafana_get("/api/search", params={"type": "dash-db", **search_params})
         lines = [f"{d['title']} (uid={d['uid']}, folder={d.get('folderTitle', 'General')})" for d in data]
         return [TextContent(type="text", text="\n".join(lines) or "No dashboards found.")]
 
@@ -170,8 +174,8 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
     elif name == "list_alerts":
         state = arguments.get("state")
-        params = {"state": state} if state else {}
-        data = await grafana_get("/api/alertmanager/grafana/api/v2/alerts", params=params)
+        alert_params = {"state": state} if state else {}
+        data = await grafana_get("/api/alertmanager/grafana/api/v2/alerts", params=alert_params)
         lines = [f"{a.get('labels', {}).get('alertname', 'unknown')} - {a.get('status', {}).get('state', 'unknown')}" for a in data]
         return [TextContent(type="text", text="\n".join(lines) or "No active alerts.")]
 
@@ -180,10 +184,10 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         return [TextContent(type="text", text=str(data))]
 
     elif name == "get_annotations":
-        params: dict = {"limit": arguments.get("limit", 100)}
+        ann_params: dict[str, Any] = {"limit": arguments.get("limit", 100)}
         if dashboard_id := arguments.get("dashboard_id"):
-            params["dashboardId"] = dashboard_id
-        data = await grafana_get("/api/annotations", params=params)
+            ann_params["dashboardId"] = dashboard_id
+        data = await grafana_get("/api/annotations", params=ann_params)
         lines = [f"[{a.get('time')}] {a.get('text', '')} (tags={a.get('tags', [])})" for a in data]
         return [TextContent(type="text", text="\n".join(lines) or "No annotations found.")]
 
@@ -194,7 +198,9 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 # ---------------------------------------------------------------------------
 # Entrypoint
 # ---------------------------------------------------------------------------
-async def main():
+
+
+async def main() -> None:
     if not GRAFANA_TOKEN:
         raise ValueError("GRAFANA_TOKEN environment variable is required.")
 
